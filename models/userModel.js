@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    active: true,
+    select: false,
+  },
 });
 
 userSchema.pre("save", async function (next) {
@@ -50,6 +55,14 @@ userSchema.pre("save", async function (next) {
 
   // Delete the confirmPassword field
   this.passwordConfirm = undefined;
+  next();
+});
+
+// this pre-middleware would run before each request that has a "find"
+// and checks if the active field in the document is set to false (DELETE)
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 
