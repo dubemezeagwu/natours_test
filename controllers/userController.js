@@ -16,7 +16,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     status: "success",
     results: allUsers.length,
     data: {
-      tours: allUsers,
+      users: allUsers,
     },
   });
 });
